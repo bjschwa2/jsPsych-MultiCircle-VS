@@ -152,14 +152,13 @@ jsPsych.plugins["visual-search-multi-circle"] = (function() {
     var display_locs = [];
     for  (var i = 0; i < trial.number_of_circles; i++){
 
-      display_locs[i] = [];
       var possible_display_locs = trial.set_size;
       var random_offset = Math.floor(Math.random() * 360);
 
       console.log(random_offset);
 
       for (var j = 0; j < possible_display_locs; j++) {
-        display_locs[i].push([
+        display_locs.push([
           Math.floor(paper_size / 2 + (cosd(random_offset + (j * (360 / possible_display_locs))) * radi[i]) - hstimw),
           Math.floor(paper_size / 2 - (sind(random_offset + (j * (360 / possible_display_locs))) * radi[i]) - hstimh)
         ]);
@@ -175,9 +174,17 @@ jsPsych.plugins["visual-search-multi-circle"] = (function() {
     // check distractors - array?
     if(!Array.isArray(trial.foil)){
       fa = [];
-      for(var i=0; i<trial.set_size; i++){
+      for(var i=0; i<display_locs.length; i++){
         fa.push(trial.foil);
       }
+      trial.foil = fa;
+    }else{
+      fa = [];
+      while (fa.length < display_locs.length){
+        for (var i=0; i<trial.foil.length; i++){
+          fa.push(trial.foil[i]);
+        }
+      } 
       trial.foil = fa;
     }
 
@@ -197,7 +204,6 @@ jsPsych.plugins["visual-search-multi-circle"] = (function() {
 
     function show_search_array() {
 
-      var search_array_images = [];
 
       var to_present = [];
       if(trial.target_present){
@@ -207,15 +213,14 @@ jsPsych.plugins["visual-search-multi-circle"] = (function() {
 
       console.log(display_locs);
 
-      for  (var j = 0; j < trial.number_of_circles; j++){
 
-        for (var i = 0; i < display_locs[j].length; i++) {
+        for (var i = 0; i < display_locs.length; i++) {
 
-          paper.innerHTML += "<img src='"+to_present[i]+"' style='position: absolute; top:"+display_locs[j][i][0]+"px; left:"+display_locs[j][i][1]+"px; width:"+trial.target_size[0]+"px; height:"+trial.target_size[1]+"px;'></img>";
+          paper.innerHTML += "<img src='"+to_present[i]+"' style='position: absolute; top:"+display_locs[i][0]+"px; left:"+display_locs[i][1]+"px; width:"+trial.target_size[0]+"px; height:"+trial.target_size[1]+"px;'></img>";
 
         } 
 
-      }
+     
 
       var trial_over = false;
 
