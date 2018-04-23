@@ -71,7 +71,7 @@ jsPsych.plugins["visual-search-multi-circle"] = (function() {
       circle_diameter: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Circle diameter',
-        default: 250,
+        default: 200,
         description: 'The diameter of the search array circle in pixels.'
       },
       target_present_key: {
@@ -97,6 +97,18 @@ jsPsych.plugins["visual-search-multi-circle"] = (function() {
         pretty_name: 'Fixation duration',
         default: 1000,
         description: 'How long to show the fixation image for before the search array (in milliseconds).'
+      },
+      number_of_circles: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Number of Circles',
+        default: 5,
+        description: 'The number of circles to draw stimuli on.'
+      },
+      space_between_circles: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Space between Circles',
+        default: 100,
+        description: 'The amount of space between circles'
       }
     }
   }
@@ -104,9 +116,20 @@ jsPsych.plugins["visual-search-multi-circle"] = (function() {
   plugin.trial = function(display_element, trial) {
 
     // circle params
-    var diam = trial.circle_diameter; // pixels
-    var radi = diam / 2;
-    var paper_size = diam + trial.target_size[0];
+    // calculate the radius and element size from diameter 
+
+    var diam = [];
+    var radi = [];
+    var paper_size = 0;
+    var circle_space = 0;
+
+    for  (var i = 0; i < trial.number_of_circles; i++){
+        diam[i] = trial.circle_diameter + circle_space; // pixels
+        radi[i] = diam[i] / 2;
+        paper_size = diam[i] + trial.target_size[0];
+
+        circle_space += trial.space_between_circles;
+    }
 
     // stimuli width, height
     var stimh = trial.target_size[0];
@@ -115,18 +138,35 @@ jsPsych.plugins["visual-search-multi-circle"] = (function() {
     var hstimw = stimw / 2;
 
     // fixation location
+    // place the fixation in the center of the paper
     var fix_loc = [Math.floor(paper_size / 2 - trial.fixation_size[0] / 2), Math.floor(paper_size / 2 - trial.fixation_size[1] / 2)];
 
     // possible stimulus locations on the circle
+    // randomly generate points around a circle
+
+    console.log("diam:"+diam);
+    console.log("radi:"+radi);
+    console.log("paper_size:"+paper_size);
+
+
     var display_locs = [];
-    var possible_display_locs = trial.set_size;
-    var random_offset = Math.floor(Math.random() * 360);
-    for (var i = 0; i < possible_display_locs; i++) {
-      display_locs.push([
-        Math.floor(paper_size / 2 + (cosd(random_offset + (i * (360 / possible_display_locs))) * radi) - hstimw),
-        Math.floor(paper_size / 2 - (sind(random_offset + (i * (360 / possible_display_locs))) * radi) - hstimh)
-      ]);
+    for  (var i = 0; i < trial.number_of_circles; i++){
+
+      display_locs[i] = [];
+      var possible_display_locs = trial.set_size;
+      var random_offset = Math.floor(Math.random() * 360);
+
+      console.log(random_offset);
+
+      for (var j = 0; j < possible_display_locs; j++) {
+        display_locs[i].push([
+          Math.floor(paper_size / 2 + (cosd(random_offset + (j * (360 / possible_display_locs))) * radi[i]) - hstimw),
+          Math.floor(paper_size / 2 - (sind(random_offset + (j * (360 / possible_display_locs))) * radi[i]) - hstimh)
+        ]);
+      }
+      console.log(display_locs);
     }
+
 
     // get target to draw on
     display_element.innerHTML += '<div id="jspsych-visual-search-multi-circle-container" style="position: relative; width:' + paper_size + 'px; height:' + paper_size + 'px"></div>';
@@ -165,9 +205,15 @@ jsPsych.plugins["visual-search-multi-circle"] = (function() {
       }
       to_present = to_present.concat(trial.foil);
 
-      for (var i = 0; i < display_locs.length; i++) {
+      console.log(display_locs);
 
-        paper.innerHTML += "<img src='"+to_present[i]+"' style='position: absolute; top:"+display_locs[i][0]+"px; left:"+display_locs[i][1]+"px; width:"+trial.target_size[0]+"px; height:"+trial.target_size[1]+"px;'></img>";
+      for  (var j = 0; j < trial.number_of_circles; j++){
+
+        for (var i = 0; i < display_locs[j].length; i++) {
+
+          paper.innerHTML += "<img src='"+to_present[i]+"' style='position: absolute; top:"+display_locs[j][i][0]+"px; left:"+display_locs[j][i][1]+"px; width:"+trial.target_size[0]+"px; height:"+trial.target_size[1]+"px;'></img>";
+
+        } 
 
       }
 
