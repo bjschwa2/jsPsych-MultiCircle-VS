@@ -1,27 +1,27 @@
 /**
  *
- * jspsych-visual-search-multi-circle
- * Bradley
+ * jspsych-visual-search-area
+ * Josh de Leeuw
  *
  * display a set of objects, with or without a target, equidistant from fixation
  * subject responds to whether or not the target is present
  *
- * based on code written as an example by Josh de Leeuw
+ * based on code written for psychtoolbox by Ben Motz
  *
  * documentation: docs.jspsych.org
  *
  **/
 
-jsPsych.plugins["visual-search-multi-circle"] = (function() {
+jsPsych.plugins["visual-search-area"] = (function() {
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('visual-search-multi-circle', 'target', 'image');
-  jsPsych.pluginAPI.registerPreload('visual-search-multi-circle', 'foil', 'image');
-  jsPsych.pluginAPI.registerPreload('visual-search-multi-circle', 'fixation_image', 'image');
+  jsPsych.pluginAPI.registerPreload('visual-search-area', 'target', 'image');
+  jsPsych.pluginAPI.registerPreload('visual-search-area', 'foil', 'image');
+  jsPsych.pluginAPI.registerPreload('visual-search-area', 'fixation_image', 'image');
 
   plugin.info = {
-    name: 'visual-search-multi-circle',
+    name: 'visual-search-area',
     description: '',
     parameters: {
       target: {
@@ -45,7 +45,7 @@ jsPsych.plugins["visual-search-multi-circle"] = (function() {
       set_size: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Set size',
-        default: undefined,
+        default: 10,
         description: 'How many items should be displayed?'
       },
       target_present: {
@@ -58,7 +58,7 @@ jsPsych.plugins["visual-search-multi-circle"] = (function() {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Target size',
         array: true,
-        default: [30, 30],
+        default: [50, 50],
         description: 'Two element array indicating the height and width of the search array element images.'
       },
       fixation_size: {
@@ -71,7 +71,7 @@ jsPsych.plugins["visual-search-multi-circle"] = (function() {
       circle_diameter: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Circle diameter',
-        default: 200,
+        default: 500,
         description: 'The diameter of the search array circle in pixels.'
       },
       target_present_key: {
@@ -97,18 +97,6 @@ jsPsych.plugins["visual-search-multi-circle"] = (function() {
         pretty_name: 'Fixation duration',
         default: 1000,
         description: 'How long to show the fixation image for before the search array (in milliseconds).'
-      },
-      number_of_circles: {
-        type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Number of Circles',
-        default: 5,
-        description: 'The number of circles to draw stimuli on.'
-      },
-      space_between_circles: {
-        type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Space between Circles',
-        default: 100,
-        description: 'The amount of space between circles'
       }
     }
   }
@@ -116,20 +104,9 @@ jsPsych.plugins["visual-search-multi-circle"] = (function() {
   plugin.trial = function(display_element, trial) {
 
     // circle params
-    // calculate the radius and element size from diameter 
-
-    var diam = [];
-    var radi = [];
-    var paper_size = 0;
-    var circle_space = 0;
-
-    for  (var i = 0; i < trial.number_of_circles; i++){
-        diam[i] = trial.circle_diameter + circle_space; // pixels
-        radi[i] = diam[i] / 2;
-        paper_size = diam[i] + trial.target_size[0];
-
-        circle_space += trial.space_between_circles;
-    }
+    var diam = trial.circle_diameter; // pixels
+    var radi = diam / 2;
+    var paper_size = diam + trial.target_size[0];
 
     // stimuli width, height
     var stimh = trial.target_size[0];
@@ -138,53 +115,53 @@ jsPsych.plugins["visual-search-multi-circle"] = (function() {
     var hstimw = stimw / 2;
 
     // fixation location
-    // place the fixation in the center of the paper
     var fix_loc = [Math.floor(paper_size / 2 - trial.fixation_size[0] / 2), Math.floor(paper_size / 2 - trial.fixation_size[1] / 2)];
 
-    // possible stimulus locations on the circle
-    // randomly generate points around a circle
+    // create a grid
+    var w = paper_size;
+    var h = paper_size;
+    var circleCount = trial.set_size;
+    var g = new Grid(150, w, h);
 
-    console.log("diam:"+diam);
-    console.log("radi:"+radi);
-    console.log("paper_size:"+paper_size);
-
-
+    // stick circles into the grid
     var display_locs = [];
-    for  (var i = 0; i < trial.number_of_circles; i++){
+    var radii = [
+      Math.round(200/2),
+      Math.round(150/2),
+      Math.round(130/2),
+      Math.round(100/2),
+      Math.round(80/2)
+    ];
 
-      var possible_display_locs = trial.set_size;
-      var random_offset = Math.floor(Math.random() * 360);
+    for (var i=0; i<trial.set_size; i++) {
+      var radius, circle;
+      var check = 0;
+      var iterations = 500;
+      do {
+        radius = stimh;
+        circle = {
+          x: Math.random() * (w - radius * 2) + radius,
+          y: Math.random() * (h - radius * 2) + radius,
+          radius: radius
+        };
 
-      console.log(random_offset);
-
-      for (var j = 0; j < possible_display_locs; j++) {
-        display_locs.push([
-          Math.floor(paper_size / 2 + (cosd(random_offset + (j * (360 / possible_display_locs))) * radi[i]) - hstimw),
-          Math.floor(paper_size / 2 - (sind(random_offset + (j * (360 / possible_display_locs))) * radi[i]) - hstimh)
-        ]);
-      }
-      console.log(display_locs);
+      } while(g.hasCollisions(circle) && ++check < iterations);
+      display_locs.push(circle);
+      g.add(circle);
     }
 
+    console.log(display_locs)
 
     // get target to draw on
-    display_element.innerHTML += '<div id="jspsych-visual-search-multi-circle-container" style="position: relative; width:' + paper_size + 'px; height:' + paper_size + 'px"></div>';
-    var paper = display_element.querySelector("#jspsych-visual-search-multi-circle-container");
+    display_element.innerHTML += '<div id="jspsych-visual-search-area-container" style="position: relative; width:' + paper_size + 'px; height:' + paper_size + 'px"></div>';
+    var paper = display_element.querySelector("#jspsych-visual-search-area-container");
 
     // check distractors - array?
     if(!Array.isArray(trial.foil)){
       fa = [];
-      for(var i=0; i<display_locs.length; i++){
+      for(var i=0; i<trial.set_size; i++){
         fa.push(trial.foil);
       }
-      trial.foil = fa;
-    }else{
-      fa = [];
-      while (fa.length < display_locs.length){
-        for (var i=0; i<trial.foil.length; i++){
-          fa.push(trial.foil[i]);
-        }
-      } 
       trial.foil = fa;
     }
 
@@ -204,6 +181,7 @@ jsPsych.plugins["visual-search-multi-circle"] = (function() {
 
     function show_search_array() {
 
+      var search_array_images = [];
 
       var to_present = [];
       if(trial.target_present){
@@ -211,16 +189,11 @@ jsPsych.plugins["visual-search-multi-circle"] = (function() {
       }
       to_present = to_present.concat(trial.foil);
 
-      console.log(display_locs);
+      for (var i = 0; i < display_locs.length; i++) {
 
+        paper.innerHTML += "<img src='"+to_present[i]+"' style='position: absolute; top:"+display_locs[i].x+"px; left:"+display_locs[i].y+"px; width:"+trial.target_size[0]+"px; height:"+trial.target_size[1]+"px;'></img>";
 
-        for (var i = 0; i < display_locs.length; i++) {
-
-          paper.innerHTML += "<img src='"+to_present[i]+"' style='position: absolute; top:"+display_locs[i][0]+"px; left:"+display_locs[i][1]+"px; width:"+trial.target_size[0]+"px; height:"+trial.target_size[1]+"px;'></img>";
-
-        } 
-
-     
+      }
 
       var trial_over = false;
 
@@ -308,3 +281,85 @@ jsPsych.plugins["visual-search-multi-circle"] = (function() {
 
   return plugin;
 })();
+
+
+
+/**
+GRID CLASS 
+**/
+function Grid(radius, width, height) {
+    // I'm not sure offhand how to find the optimum grid size.
+    // Let's use a radius as a starting point
+    this.gridX = Math.floor(width / radius);
+    this.gridY = Math.floor(height / radius);
+  
+    // Determine cell size
+    this.cellWidth = width / this.gridX;
+    this.cellHeight = height / this.gridY;
+  
+  // Create the grid structure
+    this.grid = [];
+    for (var i = 0; i < this.gridY; i++) {
+        // grid row
+        this.grid[i] = [];
+        for (var j = 0; j < this.gridX; j++) {
+            // Grid cell, holds refs to all circles
+            this.grid[i][j] = []; 
+        }
+    }
+}
+
+Grid.prototype = {
+    // Return all cells the circle intersects. Each cell is an array
+    getCells: function(circle) {
+        var cells = [];
+        var grid = this.grid;
+        // For simplicity, just intersect the bounding boxes
+        var gridX1Index = Math.floor(
+            (circle.x - circle.radius) / this.cellWidth
+        );
+        var gridX2Index = Math.ceil(
+            (circle.x + circle.radius) / this.cellWidth
+        );
+        var gridY1Index = Math.floor(
+            (circle.y - circle.radius) / this.cellHeight
+        );
+        var gridY2Index = Math.ceil(
+            (circle.y + circle.radius) / this.cellHeight
+        );
+        for (var i = gridY1Index; i < gridY2Index; i++) {
+            for (var j = gridX1Index; j < gridX2Index; j++) {
+                // Add cell to list
+                cells.push(grid[i][j]);
+            }
+        }
+        return cells;
+    },
+    add: function(circle) {
+        this.getCells(circle).forEach(function(cell) {
+            cell.push(circle);
+        });
+    },
+    hasCollisions: function(circle) {
+        return this.getCells(circle).some(function(cell) {
+            return cell.some(function(other) {
+                return this.collides(circle, other);
+            }, this);
+        }, this);
+    },
+    collides: function (circle, other) {
+        if (circle === other) {
+          return false;
+        }
+      var dx = circle.x - other.x;
+      var dy = circle.y - other.y;
+      var rr = circle.radius + other.radius;
+      return (dx * dx + dy * dy < rr * rr);
+    }
+};
+
+
+
+
+
+
