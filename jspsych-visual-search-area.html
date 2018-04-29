@@ -19,31 +19,95 @@
 
   var trial_1 = {
     target_present: true,
+    target: 'img/backwardN.gif',
+    foil: 'img/normalN.gif',
+    set_size: 10,
+    target_size: [50,50],
 
   }
 
   var trial_2 = {
     target_present: true,
+    target: 'img/backwardN.gif',
+    foil: 'img/normalN.gif',
+    set_size: 10,
+    target_size: [50,50],
 
   }
 
   var trial_3 = {
     target_present: false,
+    target: 'img/backwardN.gif',
+    foil: 'img/normalN.gif',
+    set_size: 15,
+    target_size: [40,40],
   }
 
-  // var trial_4 = {
-  //   target_present: false,
-  //   foil: ['img/1.gif', 'img/2.gif', 'img/3.gif'], // example of using multiple foils.
+  var trial_4 = {
+    target_present: true,
+    target: 'img/backwardN.gif',
+    foil: 'img/normalN.gif',
+    set_size: 15,
+    target_size: [40,40],
 
-  // }
+  }
+
+  var trial_5 = {
+    target_present: true,
+    target: 'img/backwardN.gif',
+    foil: 'img/normalN.gif',
+    set_size: 20,
+    target_size: [30,30],
+
+  }
+
+  var trial_6 = {
+    target_present: false,
+    target: 'img/backwardN.gif',
+    foil: 'img/normalN.gif',
+    set_size: 20,
+    target_size: [30,30],
+  }
+
+  var trial_7 = {
+    target_present: true,
+    target: 'img/backwardN.gif',
+    foil: 'img/normalN.gif',
+    set_size: 40,
+    target_size: [20,20],
+
+  }
+
+  var trial_8 = {
+    target_present: true,
+    target: 'img/backwardN.gif',
+    foil: 'img/normalN.gif',
+    set_size: 40,
+    target_size: [20,20],
+
+  }
+
+  var trial_9 = {
+    target_present: false,
+    target: 'img/backwardN.gif',
+    foil: 'img/normalN.gif',
+    set_size: 40,
+    target_size: [20,20],
+  }
+
+  var trial_10 = {
+    target_present: false,
+    target: 'img/backwardN.gif',
+    foil: 'img/normalN.gif',
+    set_size: 40,
+    target_size: [20,20],
+  }
 
 
   var trials = {
     type: 'visual-search-area',
-    target: 'img/backwardN.gif',
-    foil: 'img/normalN.gif',
     fixation_image: 'img/fixation.gif',
-    timeline: [trial_1, trial_2, trial_3]
+    timeline: [trial_1, trial_2, trial_3, trial_4, trial_5, trial_6, trial_7, trial_8, trial_9, trial_10]
   };
 
   jsPsych.init({
