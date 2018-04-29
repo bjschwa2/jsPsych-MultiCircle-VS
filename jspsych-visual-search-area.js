@@ -159,9 +159,17 @@ jsPsych.plugins["visual-search-area"] = (function() {
     // check distractors - array?
     if(!Array.isArray(trial.foil)){
       fa = [];
-      for(var i=0; i<trial.set_size; i++){
+      for(var i=0; i<display_locs.length; i++){
         fa.push(trial.foil);
       }
+      trial.foil = fa;
+    }else{
+      fa = [];
+      while (fa.length < display_locs.length){
+        for (var i=0; i<trial.foil.length; i++){
+          fa.push(trial.foil[i]);
+        }
+      } 
       trial.foil = fa;
     }
 
