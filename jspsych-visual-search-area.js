@@ -150,8 +150,6 @@ jsPsych.plugins["visual-search-area"] = (function() {
       g.add(circle);
     }
 
-    console.log(display_locs)
-
     // get target to draw on
     display_element.innerHTML += '<div id="jspsych-visual-search-area-container" style="position: relative; width:' + paper_size + 'px; height:' + paper_size + 'px"></div>';
     var paper = display_element.querySelector("#jspsych-visual-search-area-container");
@@ -178,13 +176,19 @@ jsPsych.plugins["visual-search-area"] = (function() {
     function show_fixation() {
       // show fixation
       //var fixation = paper.image(trial.fixation_image, fix_loc[0], fix_loc[1], trial.fixation_size[0], trial.fixation_size[1]);
-      paper.innerHTML += "<img src='"+trial.fixation_image+"' style='position: absolute; top:"+fix_loc[0]+"px; left:"+fix_loc[1]+"px; width:"+trial.fixation_size[0]+"px; height:"+trial.fixation_size[1]+"px;'></img>";
+      paper.innerHTML += "<img id='fixation' src='"+trial.fixation_image+"' style='position: absolute; top:"+fix_loc[0]+"px; left:"+fix_loc[1]+"px; width:"+trial.fixation_size[0]+"px; height:"+trial.fixation_size[1]+"px;'></img>";
 
       // wait
       jsPsych.pluginAPI.setTimeout(function() {
         // after wait is over
         show_search_array();
+        setImageVisible('fixation', false);
       }, trial.fixation_duration);
+    }
+
+    function setImageVisible(id, visible) {
+      var img = document.getElementById(id);
+      img.style.visibility = (visible ? 'visible' : 'hidden');
     }
 
     function show_search_array() {
@@ -217,6 +221,7 @@ jsPsych.plugins["visual-search-area"] = (function() {
         }
 
         clear_display();
+
 
         end_trial(info.rt, correct, info.key);
 

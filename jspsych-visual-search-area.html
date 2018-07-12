@@ -54,31 +54,31 @@
 
   var intro = {
     type: 'html-keyboard-response',
-    stimulus: '<p>On the following screens, you will see a series of N&apos;s.</p><br> <img src="'+ purpleN +'"><br><b>Press any key to continue.</b>'
+    stimulus: '<p>On the following screens, you will see a series of <b>N&apos;s.</b></p><br> <img src="'+ blackN +'"><br><b>Press any key to continue.</b>'
   }
   introduction.push(intro);
 
   var intro2 = {
     type: 'html-keyboard-response',
-    stimulus: '<p>Some of them will be backwards.</p><br><img src="'+ purpleNreverse +'"><br><b>Press any key to continue.</b>'
+    stimulus: '<p>Some of them will be backwards.</p><br><img src="'+ blackNreverse +'"><br><b>Press any key to continue.</b>'
   }
    introduction.push(intro2);
 
   var intro3 = {
     type: 'html-keyboard-response',
-    stimulus: '<p>If you see a backwards N, press the J key on your keyboard.</p><br><p>If you do not think there is a backwards N on the screen, press F on your keyboard.</p><br><p>Try and do these as quickly as possible while still maintaining accuracy.</p><br><b>Press any key to begin experiment.</b>'
+    stimulus: '<p>If you see a backwards <b>N</b>, press the <b>J</b> key on your keyboard.</p><br><p>If you do not see a backwards <b>N</b> on the screen, press <b>F</b> on your keyboard.</p><br><p>Try and do these as quickly as possible while still maintaining accuracy.</p><br><b>Press any key to begin experiment.</b>'
   }
    introduction.push(intro3);
 
 
  var num_trials = 100;
- var distractors = [blackN, blueN, greenN, purpleN, redN, orangeN, tealN, yellowN];
- var targets = [blackNreverse, blueNreverse, greenNreverse, purpleNreverse, redNreverse, orangeNreverse, tealNreverse, yellowNreverse];
+ var distractors = [blackN];
+ var targets = [blackNreverse];
  var present = [true, false];
  var trials = [];
  var size = 40;
  var min = 10;
- var max = 25;
+ var max = 24;
 
 
 
