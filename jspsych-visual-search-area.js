@@ -224,7 +224,6 @@ jsPsych.plugins["visual-search-area"] = (function() {
 
 
         end_trial(info.rt, correct, info.key);
-
       }
 
       var valid_keys = [trial.target_present_key, trial.target_absent_key];
@@ -272,7 +271,6 @@ jsPsych.plugins["visual-search-area"] = (function() {
         correct: correct,
         rt: rt,
         key_press: key_press,
-        locations: JSON.stringify(display_locs),
         target_present: trial.target_present,
         set_size: trial.set_size
       };
