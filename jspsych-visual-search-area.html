@@ -29,6 +29,8 @@
     var yellowN = 'https://login.qualtrics.com/ControlPanel/File.php?F=F_8qxrADNVUbkCWaN';
     var yellowNreverse = 'https://login.qualtrics.com/ControlPanel/File.php?F=F_etdSHcRslE4WoaV';
     var fixation = 'https://login.qualtrics.com/ControlPanel/File.php?F=F_8hMer7qhnryQp3T';
+    var blackL = 'https://ncsu.ca1.qualtrics.com/ControlPanel/File.php?F=F_3mxiCSOgJ4Gn6cd';
+    var blackT = 'https://ncsu.ca1.qualtrics.com/ControlPanel/File.php?F=F_9YnKbQoEpVVUulT';
 
     // for testing
     // var blackN = 'img/n.png';
@@ -48,77 +50,111 @@
     // var yellowN = 'img/n-yellow.png';
     // var yellowNreverse = 'img/n-reverse-yellow.png';
     // var fixation = 'img/fixation.gif';
+    // var blackL = 'img/the_L.png'
+    // var blackT = 'img/the_T.png'
 
+  // calculate key orientation
+  var bool = [true, false];
+  var key = Math.floor(Math.random()*bool.length);
+  var absent_key = '';
+  var present_key = '';
+
+  if(bool[key]){
+    absent_key = 'f';
+    present_key = 'j';
+  }else{
+    absent_key = 'j';
+    present_key = 'f';
+  }
 
 
   var intro = {
     type: 'html-keyboard-response',
-    stimulus: '<p>On the following screens, you will see a series of <b>N&apos;s.</b></p><br> <img src="'+ blackN +'"><br><b>Press any key to continue.</b>'
+    stimulus: '<p><b>Please click the screen to begin.</b><br>On the following screens, you will see a series of upside down <b>T&apos;s</b>.</p><br> <img src="'+ blackT +'"><br><b>Press any key to continue.</b>'
   }
 
   var intro2 = {
     type: 'html-keyboard-response',
-    stimulus: '<p>Some of them will be backwards.</p><br><img src="'+ blackNreverse +'"><br><b>Press any key to continue.</b>'
+    stimulus: '<p>There might be an <b>L</b> among the upside down <b>T&apos;s</b>.</p><br><img src="'+ blackL +'"><br><b>Press any key to continue.</b>'
   }
 
   var intro3 = {
     type: 'html-keyboard-response',
-    stimulus: '<p>If you see a backwards <b>N</b>, press the <b>J</b> key on your keyboard.</p><br><p>If you do not see a backwards <b>N</b> on the screen, press <b>F</b> on your keyboard.</p><br><p>Try and do these as quickly as possible while still maintaining accuracy.</p><br><b>Press any key to begin experiment.</b>'
+    stimulus: '<p>If you see a <b>L</b>, press the <b>'+present_key+'</b> key on your keyboard.</p><br><p>If you do not see a <b>L</b> on the screen, press <b>'+absent_key+'</b> on your keyboard.</p><br><p>Try and do these as quickly as possible while still maintaining accuracy.</p><br><b>Press any key to begin experiment.</b>'
   }
 
+  var help = {
+    type: 'html-keyboard-response',
+    stimulus: '<p><H3>REMEMBER</H3><br>If you see a <b>L</b>, press the <b>'+present_key+'</b> key on your keyboard.</p><br><p>If you do not see a <b>L</b> on the screen, press <b>'+absent_key+'</b> on your keyboard.</p><br><b>Press any key to continue.</b>'
+  }
 
- var num_trials = 100;
- var distractors = [blackN];
- var targets = [blackNreverse];
+ var num_trials = 33;
+ var distractors = [blackT];
+ var targets = [blackL];
  var present = [true, false];
- var trials = [];
+ var trials = [[],[],[]];
  var size = 40;
  var min = 10;
  var max = 24;
 
 
-
  // create trials
- for (var i = 0; i < num_trials ; i++){
+ for (var j = 0; j < 3 ; j++){
+   for (var i = 0; i < num_trials ; i++){
 
-  // random element from list distractors
-  // this will be the main color (same as target)
-  var index = Math.floor(Math.random()*distractors.length);
-  var distractor = distractors[index];
+    // random element from list distractors
+    // this will be the main color (same as target)
+    var index = Math.floor(Math.random()*distractors.length);
+    var distractor = distractors[index];
 
-  // same element from list targets
-  // this will be the target
-  var target = targets[index];
+    // same element from list targets
+    // this will be the target
+    var target = targets[index];
 
-  // set size between acceptible range
-  var set = Math.random() * (max - min) + min;
+    // set size between acceptible range
+    var set = Math.random() * (max - min) + min;
 
 
-  // randomize present
-  var present_index = Math.floor(Math.random()*present.length);
+    // randomize present
+    var present_index = Math.floor(Math.random()*present.length);
 
-  var trial = {
-    target_present: present[present_index],
-    target: target,
-    foil: distractor,
-    set_size: set,
-    target_size: [size,size]
+    var trial = {
+      target_present: present[present_index],
+      target: target,
+      target_absent_key: absent_key,
+      target_present_key: present_key,
+      foil: distractor,
+      set_size: set,
+      target_size: [size,size]
+    }
+
+    trials[j].push(trial);
+
+   }
   }
 
-  trials.push(trial);
-
- }
 
 
-
-  var trials = {
+  var trials1 = {
     type: 'visual-search-area',
     fixation_image: fixation,
-    timeline: trials
+    timeline: trials[0]
+  };
+
+  var trials2 = {
+    type: 'visual-search-area',
+    fixation_image: fixation,
+    timeline: trials[1]
+  };
+
+  var trials3 = {
+    type: 'visual-search-area',
+    fixation_image: fixation,
+    timeline: trials[2]
   };
 
   jsPsych.init({
-    timeline: [intro, intro2, intro3, trials],
+    timeline: [intro, intro2, intro3, trials1, help ,trials2, help ,trials3],
     on_finish: function() {
       jsPsych.data.displayData();
     }
