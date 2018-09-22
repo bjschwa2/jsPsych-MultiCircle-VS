@@ -203,7 +203,19 @@ jsPsych.plugins["visual-search-area"] = (function() {
 
       for (var i = 0; i < display_locs.length; i++) {
 
-        paper.innerHTML += "<img src='"+to_present[i]+"' style='position: absolute; top:"+display_locs[i].x+"px; left:"+display_locs[i].y+"px; width:"+trial.target_size[0]+"px; height:"+trial.target_size[1]+"px;'></img>";
+        // randomize rotation
+        var rotation_index = Math.floor(Math.random()*4);
+
+        console.log(rotation_index);
+        if (rotation_index == 1){
+          paper.innerHTML += "<img class='rotate90' src='"+to_present[i]+"' style='position: absolute; top:"+display_locs[i].x+"px; left:"+display_locs[i].y+"px; width:"+trial.target_size[0]+"px; height:"+trial.target_size[1]+"px;'></img>";
+        }else if (rotation_index == 2){
+          paper.innerHTML += "<img class='rotate180' src='"+to_present[i]+"' style='position: absolute; top:"+display_locs[i].x+"px; left:"+display_locs[i].y+"px; width:"+trial.target_size[0]+"px; height:"+trial.target_size[1]+"px;'></img>";
+        }else if (rotation_index == 3){
+          paper.innerHTML += "<img class='rotate270' src='"+to_present[i]+"' style='position: absolute; top:"+display_locs[i].x+"px; left:"+display_locs[i].y+"px; width:"+trial.target_size[0]+"px; height:"+trial.target_size[1]+"px;'></img>";
+        }else{
+          paper.innerHTML += "<img src='"+to_present[i]+"' style='position: absolute; top:"+display_locs[i].x+"px; left:"+display_locs[i].y+"px; width:"+trial.target_size[0]+"px; height:"+trial.target_size[1]+"px;'></img>";
+        }
 
       }
 
@@ -368,7 +380,6 @@ Grid.prototype = {
       return (dx * dx + dy * dy < rr * rr);
     }
 };
-
 
 
 

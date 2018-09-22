@@ -68,27 +68,35 @@
   }
 
 
-  var intro = {
+ var intro0 = {
     type: 'html-keyboard-response',
-    stimulus: '<p><b>Please click the screen to begin.</b><br>On the following screens, you will see a series of upside down <b>T&apos;s</b>.</p><br> <img src="'+ blackT +'"><br><b>Press any key to continue.</b>'
+    stimulus: '<p><b>Please click the screen and press any key to begin.</b></p>'
+  }
+
+  var intro1 = {
+    type: 'html-keyboard-response',
+    stimulus: '<p>On the following screens, you will see a series of  <b>T&apos;s</b>.</p><br><br><b>Press any key to continue.</b>'
   }
 
   var intro2 = {
     type: 'html-keyboard-response',
-    stimulus: '<p>There might be an <b>L</b> among the upside down <b>T&apos;s</b>.</p><br><img src="'+ blackL +'"><br><b>Press any key to continue.</b>'
+    stimulus: '<p>There might be an <b>L</b> among the <b>T&apos;s</b>.</p><br><br><b>Press any key to continue.</b>'
   }
-
+  
   var intro3 = {
     type: 'html-keyboard-response',
     stimulus: '<p>If you see a <b>L</b>, press the <b>'+present_key+'</b> key on your keyboard.</p><br><p>If you do not see a <b>L</b> on the screen, press <b>'+absent_key+'</b> on your keyboard.</p><br><p>Try and do these as quickly as possible while still maintaining accuracy.</p><br><b>Press any key to begin experiment.</b>'
   }
 
-  var help = {
+
+    var help = {
     type: 'html-keyboard-response',
     stimulus: '<p><H3>REMEMBER</H3><br>If you see a <b>L</b>, press the <b>'+present_key+'</b> key on your keyboard.</p><br><p>If you do not see a <b>L</b> on the screen, press <b>'+absent_key+'</b> on your keyboard.</p><br><b>Press any key to continue.</b>'
   }
 
- var num_trials = 33;
+// reduce for rendering
+var num_trials = 5;
+//  var num_trials = 33;
  var distractors = [blackT];
  var targets = [blackL];
  var present = [true, false];
@@ -154,7 +162,7 @@
   };
 
   jsPsych.init({
-    timeline: [intro, intro2, intro3, trials1, help ,trials2, help ,trials3],
+    timeline: [intro0, intro1, intro2, intro3, trials1, help ,trials2, help ,trials3],
     on_finish: function() {
       jsPsych.data.displayData();
     }
