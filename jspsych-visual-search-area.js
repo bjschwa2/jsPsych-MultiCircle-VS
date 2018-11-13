@@ -206,7 +206,6 @@ jsPsych.plugins["visual-search-area"] = (function() {
         // randomize rotation
         var rotation_index = Math.floor(Math.random()*4);
 
-        console.log(rotation_index);
         if (rotation_index == 1){
           paper.innerHTML += "<img class='rotate90' src='"+to_present[i]+"' style='position: absolute; top:"+display_locs[i].x+"px; left:"+display_locs[i].y+"px; width:"+trial.target_size[0]+"px; height:"+trial.target_size[1]+"px;'></img>";
         }else if (rotation_index == 2){
