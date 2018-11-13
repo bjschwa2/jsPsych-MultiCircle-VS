@@ -31,6 +31,10 @@
     var fixation = 'https://login.qualtrics.com/ControlPanel/File.php?F=F_8hMer7qhnryQp3T';
     var blackL = 'https://ncsu.ca1.qualtrics.com/ControlPanel/File.php?F=F_3mxiCSOgJ4Gn6cd';
     var blackT = 'https://ncsu.ca1.qualtrics.com/ControlPanel/File.php?F=F_9YnKbQoEpVVUulT';
+    var blueO = 'https://ncsu.ca1.qualtrics.com/ControlPanel/File.php?F=F_8oYjp5NDqxzxJB3';
+    var blueT = 'https://ncsu.ca1.qualtrics.com/ControlPanel/File.php?F=F_8ri0Cu2NUXEoarz';
+    var redO = 'https://ncsu.ca1.qualtrics.com/ControlPanel/File.php?F=F_03tiFchUJnAGexL';
+    var redT = 'https://ncsu.ca1.qualtrics.com/ControlPanel/File.php?F=F_5q0z4rE9KbdRhUp';
 
     // for testing
     // var blackN = 'img/n.png';
@@ -80,7 +84,7 @@ trials.push(intro0)
 // distractors
 var intro1 = {
   type: 'html-keyboard-response',
-  stimulus: '<p>On the following screens, you will see the following letters.</p><img src=' + redN + ' alt="target" style="width:40px;height:40px; margin:8px;"><img src=' + redNreverse + ' alt="target" style="width:40px;height:40px; margin:8px;"><img src=' + blueN + ' alt="target" style="width:40px;height:40px; margin:8px;"><img src=' + blueNreverse + ' alt="target" style="width:40px;height:40px; margin:8px;"><br><b>Press any key to continue.</b>'
+  stimulus: '<p>On the following screens, you will see the following letters.</p><img src=' + blueO + ' alt="target" style="width:40px;height:40px; margin:8px;"><img src=' + blueT + ' alt="target" style="width:40px;height:40px; margin:8px;"><img src=' + redO + ' alt="target" style="width:40px;height:40px; margin:8px;"><img src=' + redT + ' alt="target" style="width:40px;height:40px; margin:8px;"><br><b>Press any key to continue.</b>'
 }
 trials.push(intro1)
 
@@ -109,7 +113,7 @@ var max = 24;
 // create trials
 for (var i = 0; i < num_trials ; i++){
 
-  var elements = [blueN, blueNreverse, redN, redNreverse]; // change to T and O
+  var elements = [blueO, blueT, redO, redT];
 
   // random element from list distractors
   // this will be the main color (same as target)
