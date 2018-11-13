@@ -54,119 +54,112 @@
     // var blackT = 'img/the_T.png'
 
   // calculate key orientation
-  var bool = [true, false];
-  var key = Math.floor(Math.random()*bool.length);
-  var absent_key = '';
-  var present_key = '';
+var bool = [true, false];
+var key = Math.floor(Math.random()*bool.length);
+var absent_key = '';
+var present_key = '';
 
-  if(bool[key]){
-    absent_key = 'f';
-    present_key = 'j';
-  }else{
-    absent_key = 'j';
-    present_key = 'f';
-  }
+if(bool[key]){
+  absent_key = 'f';
+  present_key = 'j';
+}else{
+  absent_key = 'j';
+  present_key = 'f';
+}
 
+// all trials
+trials = [];
 
- var intro0 = {
-    type: 'html-keyboard-response',
-    stimulus: '<p><b>Please click the screen and press any key to begin.</b></p>'
-  }
+// click to fofce browser selecton to window
+var intro0 = {
+  type: 'html-keyboard-response',
+  stimulus: '<p><b>Please click the screen and press any key to begin.</b></p>'
+}
+trials.push(intro0)
 
-  var intro1 = {
-    type: 'html-keyboard-response',
-    stimulus: '<p>On the following screens, you will see a series of  <b>T&apos;s</b>.</p><br><br><b>Press any key to continue.</b>'
-  }
+// distractors
+var intro1 = {
+  type: 'html-keyboard-response',
+  stimulus: '<p>On the following screens, you will see a series of  <b>T&apos;s</b>.</p><br><br><b>Press any key to continue.</b>'
+}
+trials.push(intro1)
 
-  var intro2 = {
-    type: 'html-keyboard-response',
-    stimulus: '<p>There might be an <b>L</b> among the <b>T&apos;s</b>.</p><br><br><b>Press any key to continue.</b>'
-  }
-  
-  var intro3 = {
-    type: 'html-keyboard-response',
-    stimulus: '<p>If you see a <b>L</b>, press the <b>'+present_key+'</b> key on your keyboard.</p><br><p>If you do not see a <b>L</b> on the screen, press <b>'+absent_key+'</b> on your keyboard.</p><br><p>Try and do these as quickly as possible while still maintaining accuracy.</p><br><b>Press any key to begin experiment.</b>'
-  }
+// target
+var intro2 = {
+  type: 'html-keyboard-response',
+  stimulus: '<p>There might be an <b>L</b> among the <b>T&apos;s</b>.</p><br><br><b>Press any key to continue.</b>'
+}
+trials.push(intro2)
 
+// what to do
+var intro3 = {
+  type: 'html-keyboard-response',
+  stimulus: '<p>If you see a <b>L</b>, press the <b>'+present_key+'</b> key on your keyboard.</p><br><p>If you do not see a <b>L</b> on the screen, press <b>'+absent_key+'</b> on your keyboard.</p><br><p>Try and do these as quickly as possible while still maintaining accuracy.</p><br><b>Press any key to begin experiment.</b>'
+}
+trials.push(intro3)
 
-    var help = {
-    type: 'html-keyboard-response',
-    stimulus: '<p><H3>REMEMBER</H3><br>If you see a <b>L</b>, press the <b>'+present_key+'</b> key on your keyboard.</p><br><p>If you do not see a <b>L</b> on the screen, press <b>'+absent_key+'</b> on your keyboard.</p><br><b>Press any key to continue.</b>'
-  }
+// help message
+var help = {
+  type: 'html-keyboard-response',
+  stimulus: '<p><H3>REMEMBER</H3><br>If you see a <b>L</b>, press the <b>'+present_key+'</b> key on your keyboard.</p><br><p>If you do not see a <b>L</b> on the screen, press <b>'+absent_key+'</b> on your keyboard.</p><br><b>Press any key to continue.</b>'
+}
 
 // reduce for rendering
 var num_trials = 5;
 //  var num_trials = 33;
- var distractors = [blackT];
- var targets = [blackL];
- var present = [true, false];
- var trials = [[],[],[]];
- var size = 40;
- var min = 10;
- var max = 24;
+var distractors = [blackT];
+var targets = [blackL];
+var present = [true, false];
+var size = 40;
+var min = 10;
+var max = 24;
 
 
- // create trials
- for (var j = 0; j < 3 ; j++){
-   for (var i = 0; i < num_trials ; i++){
+// create trials
+for (var i = 0; i < num_trials ; i++){
 
-    // random element from list distractors
-    // this will be the main color (same as target)
-    var index = Math.floor(Math.random()*distractors.length);
-    var distractor = distractors[index];
+  // random element from list distractors
+  // this will be the main color (same as target)
+  var index = Math.floor(Math.random()*distractors.length);
+  var distractor = distractors[index];
 
-    // same element from list targets
-    // this will be the target
-    var target = targets[index];
+  // same element from list targets
+  // this will be the target
+  var target = targets[index];
 
-    // set size between acceptible range
-    var set = Math.random() * (max - min) + min;
+  // set size between acceptible range
+  var set = Math.floor(Math.random() * (max - min) + min);
 
 
-    // randomize present
-    var present_index = Math.floor(Math.random()*present.length);
+  // randomize present
+  var present_index = Math.floor(Math.random()*present.length);
 
-    var trial = {
-      target_present: present[present_index],
-      target: target,
-      target_absent_key: absent_key,
-      target_present_key: present_key,
-      foil: distractor,
-      set_size: set,
-      target_size: [size,size]
-    }
-
-    trials[j].push(trial);
-
-   }
+  var entry = {
+    target_present: present[present_index],
+    target: target,
+    target_absent_key: absent_key,
+    target_present_key: present_key,
+    foil: distractor,
+    set_size: set,
+    target_size: [size,size]
   }
 
-
-
-  var trials1 = {
+  var trial = {
     type: 'visual-search-area',
     fixation_image: fixation,
-    timeline: trials[0]
+    timeline: entry
   };
 
-  var trials2 = {
-    type: 'visual-search-area',
-    fixation_image: fixation,
-    timeline: trials[1]
-  };
+  trials.push(trial);
+}
+console.log(trials);
 
-  var trials3 = {
-    type: 'visual-search-area',
-    fixation_image: fixation,
-    timeline: trials[2]
-  };
-
-  jsPsych.init({
-    timeline: [intro0, intro1, intro2, intro3, trials1, help ,trials2, help ,trials3],
-    on_finish: function() {
-      jsPsych.data.displayData();
-    }
-  });
+jsPsych.init({
+  timeline: trials,
+  on_finish: function() {
+    jsPsych.data.displayData();
+  }
+});
 </script>
 
 </html>
