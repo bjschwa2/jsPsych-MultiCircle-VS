@@ -80,35 +80,26 @@ trials.push(intro0)
 // distractors
 var intro1 = {
   type: 'html-keyboard-response',
-  stimulus: '<p>On the following screens, you will see a series of  <b>T&apos;s</b>.</p><br><br><b>Press any key to continue.</b>'
+  stimulus: '<p>On the following screens, you will see the following letters.</p><img src=' + redN + ' alt="target" style="width:40px;height:40px; margin:8px;"><img src=' + redNreverse + ' alt="target" style="width:40px;height:40px; margin:8px;"><img src=' + blueN + ' alt="target" style="width:40px;height:40px; margin:8px;"><img src=' + blueNreverse + ' alt="target" style="width:40px;height:40px; margin:8px;"><br><b>Press any key to continue.</b>'
 }
 trials.push(intro1)
 
 // target
 var intro2 = {
   type: 'html-keyboard-response',
-  stimulus: '<p>There might be an <b>L</b> among the <b>T&apos;s</b>.</p><br><br><b>Press any key to continue.</b>'
+  stimulus: '<p>You will need to find a specified letter</b>.</p><br><b>Press any key to continue.</b>'
 }
 trials.push(intro2)
 
 // what to do
 var intro3 = {
   type: 'html-keyboard-response',
-  stimulus: '<p>If you see a <b>L</b>, press the <b>'+present_key+'</b> key on your keyboard.</p><br><p>If you do not see a <b>L</b> on the screen, press <b>'+absent_key+'</b> on your keyboard.</p><br><p>Try and do these as quickly as possible while still maintaining accuracy.</p><br><b>Press any key to begin experiment.</b>'
+  stimulus: '<p>If you see the specified letter, press the <b>'+present_key+'</b> key.</p><p>If you do not see the letter, press <b>'+absent_key+'</b>.</p><p>Try and do these as quickly as possible while still maintaining accuracy.</p><br><b>Press any key to begin experiment.</b>'
 }
 trials.push(intro3)
 
-// help message
-var help = {
-  type: 'html-keyboard-response',
-  stimulus: '<p><H3>REMEMBER</H3><br>If you see a <b>L</b>, press the <b>'+present_key+'</b> key on your keyboard.</p><br><p>If you do not see a <b>L</b> on the screen, press <b>'+absent_key+'</b> on your keyboard.</p><br><b>Press any key to continue.</b>'
-}
-
 // reduce for rendering
 var num_trials = 5;
-//  var num_trials = 33;
-var distractors = [blackT];
-var targets = [blackL];
 var present = [true, false];
 var size = 40;
 var min = 10;
@@ -118,14 +109,16 @@ var max = 24;
 // create trials
 for (var i = 0; i < num_trials ; i++){
 
+  var elements = [blueN, blueNreverse, redN, redNreverse]; // change to T and O
+
   // random element from list distractors
   // this will be the main color (same as target)
-  var index = Math.floor(Math.random()*distractors.length);
-  var distractor = distractors[index];
+  var index = Math.floor(Math.random()*elements.length);
+  var target = elements[index];
 
-  // same element from list targets
-  // this will be the target
-  var target = targets[index];
+  // remove index
+  elements.splice(index, 1);
+  var distractors = elements;
 
   // set size between acceptible range
   var set = Math.floor(Math.random() * (max - min) + min);
@@ -139,7 +132,7 @@ for (var i = 0; i < num_trials ; i++){
     target: target,
     target_absent_key: absent_key,
     target_present_key: present_key,
-    foil: distractor,
+    foil: distractors,
     set_size: set,
     target_size: [size,size]
   }
@@ -147,7 +140,7 @@ for (var i = 0; i < num_trials ; i++){
   // help
   var help = {
     type: 'html-keyboard-response',
-    stimulus: '<p><b>Look for the following</b></p><br><img src=' + blackT + ' alt="target" style="width:40px;height:40px;"><br><p><H3>REMEMBER</H3>If you see a <b>L</b>, press the <b>'+present_key+'</b> key on your keyboard.</p><p>If you do not see a <b>L</b> on the screen, press <b>'+absent_key+'</b> on your keyboard.</p><b>Press any key to continue.</b>'
+    stimulus: '<p><b>Look for the following</b></p><br><img src=' + target + ' alt="target" style="width:40px;height:40px;"><br><p><H3>REMEMBER</H3>If you see the above letter, press the <b>'+present_key+'</b> key.</p><p>If you do not see the above letter, press <b>'+absent_key+'</b>.</p><b>Press any key to continue.</b>'
   }
   trials.push(help)
 
