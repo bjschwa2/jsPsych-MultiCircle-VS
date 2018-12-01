@@ -791,11 +791,14 @@ function formatoutputdata(a) {
 }
 
 function showdata_html() {
-    var a = document.createElement("BUTTON"),
-        b = document.createTextNode("Show data");
-    a.appendChild(b);
-    a.setAttribute("onclick", 'showdata.innerHTML = "<table border=1>" + formatoutputdata(outputdata) + "</table>";');
-    document.body.appendChild(a)
+
+    Qualtrics.SurveyEngine.setEmbeddedData("ResultOfFlanker", outputdata);
+    
+    // var a = document.createElement("BUTTON"),
+    //     b = document.createTextNode("Show data");
+    // a.appendChild(b);
+    // a.setAttribute("onclick", 'showdata.innerHTML = "<table border=1>" + formatoutputdata(outputdata) + "</table>";');
+    // document.body.appendChild(a)
 }
 var pg = 1,
     pk = 2,
@@ -1307,21 +1310,21 @@ var pg = 1,
                         a) : 0;
                     RTMixCost = Math.round(RTmixRepeat - RTpure);
                     RTSwitchCost = Math.round(RTmixSwitch - RTmixRepeat);
-                    psy_add_text_rgb_db(0, -200, -150, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, "Response times (RT in ms):", 1);
-                    psy_draw_all_db();
-                    tmptext = "RTs in single-task blocks:  " + RTpure + " ms";
-                    psy_add_text_rgb_db(0, -200, -50, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, tmptext, 1);
-                    psy_draw_all_db();
-                    tmptext = "RTs in mixed block, task-repeat trials:  " + RTmixRepeat + "ms";
-                    psy_add_text_rgb_db(0, -200, 0, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, tmptext,
-                        1);
-                    psy_draw_all_db();
-                    tmptext = "RTs in mixed block, task-switch trials:  " + RTmixSwitch + "ms";
-                    psy_add_text_rgb_db(0, -200, 50, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, tmptext, 1);
-                    psy_draw_all_db();
-                    tmptext = "Task switch cost in RTs:  " + RTSwitchCost + "ms";
-                    psy_add_text_rgb_db(0, -200, 100, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, tmptext, 1);
-                    psy_draw_all_db();
+                    // psy_add_text_rgb_db(0, -200, -150, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, "Response times (RT in ms):", 1);
+                    // psy_draw_all_db();
+                    // tmptext = "RTs in single-task blocks:  " + RTpure + " ms";
+                    // psy_add_text_rgb_db(0, -200, -50, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, tmptext, 1);
+                    // psy_draw_all_db();
+                    // tmptext = "RTs in mixed block, task-repeat trials:  " + RTmixRepeat + "ms";
+                    // psy_add_text_rgb_db(0, -200, 0, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, tmptext,
+                    //     1);
+                    // psy_draw_all_db();
+                    // tmptext = "RTs in mixed block, task-switch trials:  " + RTmixSwitch + "ms";
+                    // psy_add_text_rgb_db(0, -200, 50, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, tmptext, 1);
+                    // psy_draw_all_db();
+                    // tmptext = "Task switch cost in RTs:  " + RTSwitchCost + "ms";
+                    // psy_add_text_rgb_db(0, -200, 100, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, tmptext, 1);
+                    // psy_draw_all_db();
                     psy_add_text_rgb_db(0, -200, 150, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, "Press space bar to continue", 1);
                     psy_draw_all_db();
                     psy_wait(0, 32);
